@@ -1,0 +1,3 @@
+org\sakaiproject\component\app\scheduler\jobs\ContentReviewAddDocumentQueue.class
+org\sakaiproject\component\app\scheduler\jobs\ContentReviewQueue.class
+org\sakaiproject\component\app\scheduler\jobs\ContentReviewReports.class

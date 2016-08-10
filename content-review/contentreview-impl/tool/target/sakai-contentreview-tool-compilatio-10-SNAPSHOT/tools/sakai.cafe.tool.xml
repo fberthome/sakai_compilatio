@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<registration>
+    <tool id="sakai.tasklist"
+        title="Task List"
+        description="Programmer's Cafe - Task List">
+        <category name="course" />
+        <category name="project" />
+    </tool>
+</registration>

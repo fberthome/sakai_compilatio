@@ -1,0 +1,4 @@
+org\sakaiproject\contentreview\test\ContentReviewTestDataLoad.class
+org\sakaiproject\contentreview\test\PreloadTestDataImpl.class
+org\sakaiproject\contentreview\logic\CompilatioTest.class
+org\sakaiproject\contentreview\dao\ContentReviewDaoImplTest.class
