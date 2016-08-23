@@ -1,5 +1,5 @@
 /**********************************************************************************
- * $URL: https://source.sakaiproject.org/svn/assignment/tags/sakai-10.6/assignment-tool/tool/src/java/org/sakaiproject/assignment/tool/AssignmentAction.java $
+ * $URL: https://source.sakaiproject.org/svn/assignment/tags/sakai-10.7/assignment-tool/tool/src/java/org/sakaiproject/assignment/tool/AssignmentAction.java $
  * $Id: AssignmentAction.java 322192 2015-12-22 21:20:19Z enietzel@anisakai.com $
  ***********************************************************************************
  *
@@ -1051,6 +1051,7 @@ public class AssignmentAction extends PagedResourceActionII {
 					rb.getFormattedMessage("review.contentReviewIndicator", new Object[] { reviewServiceName }));
 			context.put("reviewNoIndicator",
 					rb.getFormattedMessage("review.contentReviewNoIndicator", new Object[] { reviewServiceName }));
+	
 		}
 
 		// Peer Assessment
@@ -6092,8 +6093,7 @@ public class AssignmentAction extends PagedResourceActionII {
 									if (errorStr != null) {
 										ContentReviewItem.Error error = ContentReviewItem.Error.valueOf(errorStr);
 										if (error != null && error.getErrorCode() > 10) {
-											String errorMessage = rb.getString("compilatio." + errorStr);
-											addAlert(state, errorMessage);
+											addAlert(state, "compilatio." + errorStr);
 										}
 									}
 								}
@@ -11157,7 +11157,8 @@ public class AssignmentAction extends PagedResourceActionII {
 
 		// remove content-review setting
 		state.removeAttribute(NEW_ASSIGNMENT_USE_REVIEW_SERVICE);
-		state.removeAttribute(NEW_ASSIGNMENT_ALLOW_STUDENT_VIEW);
+		state.removeAttribute(NEW_ASSIGNMENT_ALLOW_STUDENT_VIEW);	
+		
 		state.removeAttribute(Assignment.ASSIGNMENT_RELEASERESUBMISSION_NOTIFICATION_VALUE);
 
 		state.removeAttribute(AssignmentService.PROP_ASSIGNMENT_ASSOCIATE_GRADEBOOK_ASSIGNMENT);
