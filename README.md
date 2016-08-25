@@ -6,13 +6,13 @@
 **Procédure d’installation**
 > Il est supposé que l’utilisateur a installé Sakai_{version}. Les sources de sakai sont présentes dans le répertoire {sakai_src_home}.<br/>
 *	Arrêter Tomcat
-* Récupérer la branche sakai-10.7 dans votre gestionnaire de source
-* récupérer le zip des source (par exemple compilatio-sakai-10.7.zip)
+* Récupérer la branche sakai-10.6 dans votre gestionnaire de source
+* récupérer le zip des source (par exemple compilatio-sakai-10.6.zip)
 * Copier le zip sous {sakai_src_home} où sakai_src_home est le répertoire parent où sont installées les sources de sakai
 * cd {sakai_src_home}
 * rm -rf content-review
 * cd ..
-* Dézipper le fichier compilatio-sakai-10.7.zip
+* Dézipper le fichier compilatio-sakai-10..zip
 * cd content-review
 * mvn clean install sakai:deploy (voir partie déploiement)
 * cd ../
