@@ -12,7 +12,7 @@
 * cd {sakai_src_home}
 * rm -rf content-review
 * cd ..
-* Dézipper le fichier compilation-10.7.zip
+* Dézipper le fichier compilatio-sakai-10.7.zip
 * cd content-review
 * mvn clean install sakai:deploy (voir partie déploiement)
 * cd ../
