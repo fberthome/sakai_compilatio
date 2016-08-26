@@ -1,5 +1,5 @@
 /**********************************************************************************
- * $URL: https://source.sakaiproject.org/svn/assignment/tags/sakai-10.6/assignment-api/api/src/java/org/sakaiproject/assignment/cover/AssignmentService.java $
+ * $URL: https://source.sakaiproject.org/svn/assignment/tags/sakai-10.7/assignment-api/api/src/java/org/sakaiproject/assignment/cover/AssignmentService.java $
  * $Id: AssignmentService.java 321260 2015-09-18 21:15:01Z matthew@longsight.com $
  ***********************************************************************************
  *
@@ -854,5 +854,18 @@ public class AssignmentService {
 		if (service == null)
 			return null;
 		return service.escapeInvalidCharsEntry(param0);
+
 	}
+	
+	public static boolean hasBeenSubmitted(
+			org.sakaiproject.assignment.api.AssignmentSubmissionEdit param0) {
+		org.sakaiproject.assignment.api.AssignmentService service = getInstance();
+		if (service == null)
+			return false;
+
+		return service.hasBeenSubmitted(param0);
+	}
+
+	
+	
 }

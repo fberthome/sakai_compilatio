@@ -1,5 +1,5 @@
 /**********************************************************************************
- * $URL: https://source.sakaiproject.org/svn/assignment/tags/sakai-10.6/assignment-api/api/src/java/org/sakaiproject/assignment/api/AssignmentService.java $
+ * $URL: https://source.sakaiproject.org/svn/assignment/tags/sakai-10.7/assignment-api/api/src/java/org/sakaiproject/assignment/api/AssignmentService.java $
  * $Id: AssignmentService.java 321260 2015-09-18 21:15:01Z matthew@longsight.com $
  ***********************************************************************************
  *
@@ -909,4 +909,14 @@ public interface AssignmentService extends EntityProducer
 	 * Params: AssignmentSubmission s
 	 */
 	public boolean assignmentUsesAnonymousGrading(Assignment a);
+	
+	/*
+	 * This method allows you to know if there are submissions submitted
+	 *
+	 * SAK-30062
+	 *
+	 * Params: AssignmentSubmission s
+	 */
+	public boolean hasBeenSubmitted(AssignmentSubmission s);
+
 }
