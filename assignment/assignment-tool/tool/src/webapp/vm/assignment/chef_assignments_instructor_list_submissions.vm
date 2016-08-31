@@ -790,10 +790,10 @@
 									 			</a>
 									 		</div>
 									 	 #elseif ($!submission && $!submitTime)
-									 	 	<div class="plagiarismreport plagiarismwaitingsubmission" title="$tlang.getString("compilatio.waitingTransfer")">
+									 	 	<div class="plagiarismreport plagiarismwaitingsubmission" title="$tlang.getString("compilatio.inprogress")">
 	                                 	 	<div class="small-logo-grade" title="Compilatio.net"></div>
 	                                 	 	<img src="/sakai-contentreview-tool-compilatio/images/queue.png" class="float-right">
-	                                 	 	<span class="similarity">$tlang.getString("compilatio.waitingTransfer")</span></div>	 	
+	                                 	 	<span class="similarity">$tlang.getString("compilatio.inprogress")</span></div>	 	
 									 	 #end
 	                                    <!--  $tlang.getString("review.noreport")   -->
 	                                 #elseif ($submission.getReviewScore() == -3)
