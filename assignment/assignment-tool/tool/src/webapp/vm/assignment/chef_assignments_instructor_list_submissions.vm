@@ -797,14 +797,14 @@
 									 	 #end
 	                                    <!--  $tlang.getString("review.noreport")   -->
 	                                 #elseif ($submission.getReviewScore() == -3)
-	                                 	 <div class="plagiarismreport" title="$tlang.getString("compilatio.waiting")">
+	                                 	 <div class="plagiarismreport" title="$tlang.getString("compilatio.inprogress")">
 	                                 	 	<div class="small-logo-grade" title="Compilatio.net"></div>
 	                                 	 	<img src="/sakai-contentreview-tool-compilatio/images/queue.png" class="float-right">
-	                                 	 	<span class="similarity">$tlang.getString("compilatio.waiting")</span></div>	
+	                                 	 	<span class="similarity">$tlang.getString("compilatio.inprogress")</span></div>	
 	                                 #elseif ($submission.getReviewScore() == -4)
-	                                 	 <div class="plagiarismWaitingSubmission" title="$tlang.getString("compilatio.waitingTransfer")">
+	                                 	 <div class="plagiarismWaitingSubmission" title="$tlang.getString("compilatio.waiting")">
 	                                 	 	<div class="small-logo-grade" title="Compilatio.net"></div>
-	                                 	 	<span class="similarity">$tlang.getString("compilatio.waitingTransfer")</span></div>	
+	                                 	 	<span class="similarity">$tlang.getString("compilatio.waiting")</span></div>	
 	                                 	 	<img src="/sakai-contentreview-tool-compilatio/images/queue.png" class="float-right">
 									 #elseif ($submission.getReviewReport().equals("Error"))
 										<div class="alertMessage" >$tlang.getString("review.errorMessage")</div>
