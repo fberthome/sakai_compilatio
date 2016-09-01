@@ -777,7 +777,6 @@
 							#end
 							#if ($allowReviewService && $assignmentContent.AllowReviewService)
 								 <td headers="reviewService" class="reviewServiceColumn">
-									 
 									 #if ($submission.getReviewScore() == -1)
 	                                     <div class="alertMessage" >$!submission.getReviewError()</div>
 	                                 #elseif ($submission.getReviewScore() == -2)
@@ -791,10 +790,10 @@
 									 			</a>
 									 		</div>
 									 	 #elseif ($!submission && $!submitTime)
-									 	 	<div class="plagiarismreport plagiarismwaitingsubmission" title="$tlang.getString("compilatio.inprogress")">
+									 	 	<div class="plagiarismreport plagiarismwaitingsubmission" title="$tlang.getString("compilatio.waiting")">
 	                                 	 	<div class="small-logo-grade" title="Compilatio.net"></div>
 	                                 	 	<img src="/sakai-contentreview-tool-compilatio/images/queue.png" class="float-right">
-	                                 	 	<span class="similarity">$tlang.getString("compilatio.inprogress")</span></div>	 	
+	                                 	 	<span class="similarity">$tlang.getString("compilatio.waiting")</span></div>	 	
 									 	 #end
 	                                    <!--  $tlang.getString("review.noreport")   -->
 	                                 #elseif ($submission.getReviewScore() == -3)
