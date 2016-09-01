@@ -777,7 +777,6 @@
 							#end
 							#if ($allowReviewService && $assignmentContent.AllowReviewService)
 								 <td headers="reviewService" class="reviewServiceColumn">
-									 
 									 #if ($submission.getReviewScore() == -1)
 	                                     <div class="alertMessage" >$!submission.getReviewError()</div>
 	                                 #elseif ($submission.getReviewScore() == -2)
