@@ -301,7 +301,7 @@ public class CompilatioReviewServiceImpl extends BaseReviewServiceImpl {
 		String reportURL = null;
 		try {
 			Document reportURLDoc = compilatioConn.callCompilatioReturnDocument(params);
-			boolean successQuery = reportURLDoc.getElementsByTagName("sucess") != null;
+			boolean successQuery = reportURLDoc.getElementsByTagName("success") != null;
 			if (successQuery) {
 				reportURL = ((CharacterData) (reportURLDoc.getElementsByTagName("success").item(0).getFirstChild()))
 						.getData();
