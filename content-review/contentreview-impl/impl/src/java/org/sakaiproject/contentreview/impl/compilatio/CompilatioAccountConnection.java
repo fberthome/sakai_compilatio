@@ -24,10 +24,10 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sakaiproject.compilatio.util.CompilatioAPIUtil;
 import org.sakaiproject.component.api.ServerConfigurationService;
 import org.sakaiproject.contentreview.exception.SubmissionException;
 import org.sakaiproject.contentreview.exception.TransientSubmissionException;
-import org.sakaiproject.compilatio.util.CompilatioAPIUtil;
 import org.w3c.dom.Document;
 
 /**
@@ -99,10 +99,6 @@ public class CompilatioAccountConnection {
 	
 	public Document callCompilatioReturnDocument(Map params) throws TransientSubmissionException, SubmissionException {
 		return CompilatioAPIUtil.callCompilatioReturnDocument(apiURL, params, secretKey, compilatioConnTimeout, proxy, false);
-	}
-
-	public String callCompilatioReturnString(Map params) throws TransientSubmissionException, SubmissionException {
-		return CompilatioAPIUtil.callCompilatioReturnURL(apiURL, params, secretKey, compilatioConnTimeout, proxy, false);
 	}
         
 	// Dependency
