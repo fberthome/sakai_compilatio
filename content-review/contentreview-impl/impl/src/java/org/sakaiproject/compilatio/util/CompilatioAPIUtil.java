@@ -19,6 +19,7 @@ package org.sakaiproject.compilatio.util;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.StringReader;
 import java.net.Proxy;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,6 +27,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPConnection;
@@ -41,6 +45,8 @@ import org.apache.commons.logging.LogFactory;
 import org.sakaiproject.contentreview.exception.SubmissionException;
 import org.sakaiproject.contentreview.exception.TransientSubmissionException;
 import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * This is a utility class for wrapping the physical https calls to the Turn It
@@ -86,6 +92,16 @@ public class CompilatioAPIUtil {
 			soapConnection.close();
 
 			// loading the XML document
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			soapResponse.writeTo(out);
+			DocumentBuilderFactory builderfactory = DocumentBuilderFactory.newInstance();
+			builderfactory.setNamespaceAware(true);
+
+			DocumentBuilder builder = builderfactory.newDocumentBuilder();
+			xmlDocument = builder.parse(new InputSource(new StringReader(out.toString())));
+			
+			
+			// loading the XML document
 			log.debug("Request SOAP Message:");
 			soapMessage.writeTo(outStream);
 			soapResponse.writeTo(outStream);
@@ -97,6 +113,12 @@ public class CompilatioAPIUtil {
 			// TODO Auto-generated catch block
 			log.error(e);
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			log.error(e);
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			log.error(e);
+		} catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
 			log.error(e);
 		}
