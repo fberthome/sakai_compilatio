@@ -20,36 +20,27 @@ package org.sakaiproject.contentreview.impl.compilatio;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.validator.EmailValidator;
-import org.sakaiproject.api.common.edu.person.SakaiPerson;
 import org.sakaiproject.api.common.edu.person.SakaiPersonManager;
-import org.sakaiproject.service.gradebook.shared.Assignment;
 import org.sakaiproject.assignment.api.AssignmentContent;
 import org.sakaiproject.assignment.api.AssignmentService;
-import org.sakaiproject.authz.api.SecurityAdvisor;
 import org.sakaiproject.authz.api.SecurityService;
+import org.sakaiproject.compilatio.util.CompilatioAPIUtil;
 import org.sakaiproject.component.api.ServerConfigurationService;
 import org.sakaiproject.component.cover.ComponentManager;
 import org.sakaiproject.content.api.ContentHostingService;
@@ -62,7 +53,6 @@ import org.sakaiproject.contentreview.exception.TransientSubmissionException;
 import org.sakaiproject.contentreview.impl.hbm.BaseReviewServiceImpl;
 import org.sakaiproject.contentreview.model.ContentReviewItem;
 import org.sakaiproject.contentreview.model.ContentReviewItem.Error;
-import org.sakaiproject.db.api.SqlReader;
 import org.sakaiproject.db.api.SqlService;
 import org.sakaiproject.entity.api.Entity;
 import org.sakaiproject.entity.api.EntityManager;
@@ -76,20 +66,15 @@ import org.sakaiproject.exception.ServerOverloadException;
 import org.sakaiproject.exception.TypeException;
 import org.sakaiproject.genericdao.api.search.Restriction;
 import org.sakaiproject.genericdao.api.search.Search;
-import org.sakaiproject.service.gradebook.shared.GradebookExternalAssessmentService;
-import org.sakaiproject.service.gradebook.shared.GradebookNotFoundException;
-import org.sakaiproject.service.gradebook.shared.GradebookService;
 import org.sakaiproject.site.api.Site;
 import org.sakaiproject.site.api.SiteService;
 import org.sakaiproject.time.api.Time;
 import org.sakaiproject.time.cover.TimeService;
 import org.sakaiproject.tool.api.Session;
 import org.sakaiproject.tool.api.SessionManager;
-import org.sakaiproject.compilatio.util.CompilatioAPIUtil;
 import org.sakaiproject.user.api.PreferencesService;
 import org.sakaiproject.user.api.User;
 import org.sakaiproject.user.api.UserDirectoryService;
-import org.sakaiproject.user.api.UserNotDefinedException;
 import org.sakaiproject.util.ResourceLoader;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
@@ -286,7 +271,7 @@ public class CompilatioReviewServiceImpl extends BaseReviewServiceImpl {
 			log.debug("More than one matching item found - using first item found");
 
 		// check that the report is available
-		// TODO if the database record does not show report available check with
+		// TODO if the database record does not sshow report available check with
 		// compilatio (maybe)
 
 		ContentReviewItem item = (ContentReviewItem) matchingItems.iterator().next();
@@ -301,7 +286,8 @@ public class CompilatioReviewServiceImpl extends BaseReviewServiceImpl {
 		String reportURL = null;
 		try {
 			Document reportURLDoc = compilatioConn.callCompilatioReturnDocument(params);
-			boolean successQuery = reportURLDoc.getElementsByTagName("success") != null;
+			NodeList nodeListSuccess = reportURLDoc.getElementsByTagName("success");
+			boolean successQuery = nodeListSuccess != null && nodeListSuccess.item(0) != null;
 			if (successQuery) {
 				reportURL = ((CharacterData) (reportURLDoc.getElementsByTagName("success").item(0).getFirstChild()))
 						.getData();
@@ -751,8 +737,8 @@ public class CompilatioReviewServiceImpl extends BaseReviewServiceImpl {
 			}
 
 			Element root = document.getDocumentElement();
-
-			boolean successQuery = root.getElementsByTagName("sucess") != null;
+			NodeList nodeListSuccess = root.getElementsByTagName("success");
+			boolean successQuery = nodeListSuccess != null && nodeListSuccess.item(0) != null;
 			if (successQuery) {
 				log.debug("Submission successful");
 				currentItem.setStatus(ContentReviewItem.SUBMITTED_AWAITING_REPORT_CODE);
@@ -881,7 +867,8 @@ public class CompilatioReviewServiceImpl extends BaseReviewServiceImpl {
 
 		Element root = document.getDocumentElement();
 
-		boolean successQuery = root.getElementsByTagName("sucess") != null;
+		NodeList nodeListSuccess = root.getElementsByTagName("success");
+		boolean successQuery = nodeListSuccess != null && nodeListSuccess.item(0) != null;
 		if (successQuery) {
 			log.debug("Submission successful");
 			currentItem.setStatus(ContentReviewItem.SUBMITTED_AWAITING_REPORT_CODE);
@@ -1093,15 +1080,16 @@ public class CompilatioReviewServiceImpl extends BaseReviewServiceImpl {
 
 					NodeList objects = root.getElementsByTagName("documentStatus");
 					log.debug(objects.getLength() + " objects in the returned list");
-					String reportVal = ((CharacterData) (root.getElementsByTagName("indice").item(0).getFirstChild()))
-							.getData().trim();
+					
 					String status = ((CharacterData) (root.getElementsByTagName("status").item(0).getFirstChild()))
 							.getData().trim();
 
 					if ("ANALYSE_COMPLETE".equals(status)) {
+						String reportVal = ((CharacterData) (root.getElementsByTagName("indice").item(0).getFirstChild()))
+								.getData().trim();
 						currentItem.setReviewScore((int) Math.round(Double.parseDouble(reportVal)));
 						currentItem.setStatus(ContentReviewItem.SUBMITTED_REPORT_AVAILABLE_CODE);
-					} else {
+					} else if ("ANALYSE_PROCESSING".equals(status)){
 						if (root.getElementsByTagName("progression") != null) {
 							String progression = ((CharacterData) (root.getElementsByTagName("progression").item(0)
 									.getFirstChild())).getData().trim();
