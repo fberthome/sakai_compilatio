@@ -301,7 +301,8 @@ public class CompilatioReviewServiceImpl extends BaseReviewServiceImpl {
 		String reportURL = null;
 		try {
 			Document reportURLDoc = compilatioConn.callCompilatioReturnDocument(params);
-			boolean successQuery = reportURLDoc.getElementsByTagName("success") != null;
+			NodeList nodeListSuccess = reportURLDoc.getElementsByTagName("success");
+			boolean successQuery = nodeListSuccess != null && nodeListSuccess.item(0) != null;
 			if (successQuery) {
 				reportURL = ((CharacterData) (reportURLDoc.getElementsByTagName("success").item(0).getFirstChild()))
 						.getData();
@@ -751,8 +752,8 @@ public class CompilatioReviewServiceImpl extends BaseReviewServiceImpl {
 			}
 
 			Element root = document.getDocumentElement();
-
-			boolean successQuery = root.getElementsByTagName("sucess") != null;
+			NodeList nodeListSuccess = root.getElementsByTagName("success");
+			boolean successQuery = nodeListSuccess != null && nodeListSuccess.item(0) != null;
 			if (successQuery) {
 				log.debug("Submission successful");
 				currentItem.setStatus(ContentReviewItem.SUBMITTED_AWAITING_REPORT_CODE);
@@ -881,7 +882,8 @@ public class CompilatioReviewServiceImpl extends BaseReviewServiceImpl {
 
 		Element root = document.getDocumentElement();
 
-		boolean successQuery = root.getElementsByTagName("sucess") != null;
+		NodeList nodeListSuccess = root.getElementsByTagName("success");
+		boolean successQuery = nodeListSuccess != null && nodeListSuccess.item(0) != null;
 		if (successQuery) {
 			log.debug("Submission successful");
 			currentItem.setStatus(ContentReviewItem.SUBMITTED_AWAITING_REPORT_CODE);
@@ -1093,15 +1095,15 @@ public class CompilatioReviewServiceImpl extends BaseReviewServiceImpl {
 
 					NodeList objects = root.getElementsByTagName("documentStatus");
 					log.debug(objects.getLength() + " objects in the returned list");
-					String reportVal = ((CharacterData) (root.getElementsByTagName("indice").item(0).getFirstChild()))
-							.getData().trim();
 					String status = ((CharacterData) (root.getElementsByTagName("status").item(0).getFirstChild()))
 							.getData().trim();
 
 					if ("ANALYSE_COMPLETE".equals(status)) {
+						String reportVal = ((CharacterData) (root.getElementsByTagName("indice").item(0).getFirstChild()))
+								.getData().trim();
 						currentItem.setReviewScore((int) Math.round(Double.parseDouble(reportVal)));
 						currentItem.setStatus(ContentReviewItem.SUBMITTED_REPORT_AVAILABLE_CODE);
-					} else {
+					} else if ("ANALYSE_PROCESSING".equals(status)){
 						if (root.getElementsByTagName("progression") != null) {
 							String progression = ((CharacterData) (root.getElementsByTagName("progression").item(0)
 									.getFirstChild())).getData().trim();
