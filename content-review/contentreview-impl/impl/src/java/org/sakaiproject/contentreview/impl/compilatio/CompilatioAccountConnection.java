@@ -69,6 +69,10 @@ public class CompilatioAccountConnection {
 				SocketAddress addr = new InetSocketAddress(proxyHost, new Integer(proxyPort).intValue());
 				proxy = new Proxy(Proxy.Type.HTTP, addr);
 				log.debug("Using proxy: " + proxyHost + " " + proxyPort);
+				
+				
+				System.setProperty("http.proxyHost", proxyHost);
+		        System.setProperty("http.proxyPort", proxyPort);
 			} catch (NumberFormatException e) {
 				log.debug("Invalid proxy port specified: " + proxyPort);
 			}
@@ -76,6 +80,8 @@ public class CompilatioAccountConnection {
 			try {
 				SocketAddress addr = new InetSocketAddress(System.getProperty("http.proxyHost"), new Integer(System.getProperty("http.proxyPort")).intValue());
 				proxy = new Proxy(Proxy.Type.HTTP, addr);
+				System.setProperty("http.proxyHost", proxyHost);
+		        System.setProperty("http.proxyPort", proxyPort);
 				log.debug("Using proxy: " + System.getProperty("http.proxyHost") + " " + System.getProperty("http.proxyPort"));
 			} catch (NumberFormatException e) {
 				log.debug("Invalid proxy port specified: " + System.getProperty("http.proxyPort"));
