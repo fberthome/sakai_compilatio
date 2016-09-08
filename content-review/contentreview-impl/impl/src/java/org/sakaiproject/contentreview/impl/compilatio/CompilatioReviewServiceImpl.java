@@ -251,12 +251,12 @@ public class CompilatioReviewServiceImpl extends BaseReviewServiceImpl {
 	public String getReviewReportInstructor(String contentId) throws QueueException, ReportException {
 		return getReviewReport(contentId);
 	}
-	
-	@Override	
+
+	@Override
 	public String getReviewReportStudent(String contentId) throws QueueException, ReportException {
 		return getReviewReport(contentId);
 	}
-	
+
 	public String getReviewReport(String contentId) throws QueueException, ReportException {
 
 		Search search = new Search();
@@ -271,7 +271,8 @@ public class CompilatioReviewServiceImpl extends BaseReviewServiceImpl {
 			log.debug("More than one matching item found - using first item found");
 
 		// check that the report is available
-		// TODO if the database record does not sshow report available check with
+		// TODO if the database record does not sshow report available check
+		// with
 		// compilatio (maybe)
 
 		ContentReviewItem item = (ContentReviewItem) matchingItems.iterator().next();
@@ -807,11 +808,10 @@ public class CompilatioReviewServiceImpl extends BaseReviewServiceImpl {
 				 */
 
 				dao.update(currentItem);
-
+				// release the lock so the reports job can handle it
+				releaseLock(currentItem);
+				continue;
 			}
-			// release the lock so the reports job can handle it
-			releaseLock(currentItem);
-			getNextItemInSubmissionQueue();
 		}
 
 		log.info("Submission queue run completed: " + success + " items submitted, " + errors + " errors.");
@@ -1031,11 +1031,11 @@ public class CompilatioReviewServiceImpl extends BaseReviewServiceImpl {
 			} else {
 				log.debug("Still have retries left, continuing. ItemID: " + currentItem.getId());
 				// Moving down to check for report generate speed.
-				// long l = currentItem.getRetryCount().longValue();
-				// l++;
-				// currentItem.setRetryCount(Long.valueOf(l));
-				// currentItem.setNextRetryTime(this.getNextRetryTime(Long.valueOf(l)));
-				// dao.update(currentItem);
+				long l = currentItem.getRetryCount().longValue();
+				l++;
+				currentItem.setRetryCount(Long.valueOf(l));
+				currentItem.setNextRetryTime(this.getNextRetryTime(Long.valueOf(l)));
+				dao.update(currentItem);
 			}
 
 			if (currentItem.getExternalId() == null || currentItem.getExternalId().equals("")) {
@@ -1080,16 +1080,16 @@ public class CompilatioReviewServiceImpl extends BaseReviewServiceImpl {
 
 					NodeList objects = root.getElementsByTagName("documentStatus");
 					log.debug(objects.getLength() + " objects in the returned list");
-					
+
 					String status = ((CharacterData) (root.getElementsByTagName("status").item(0).getFirstChild()))
 							.getData().trim();
 
 					if ("ANALYSE_COMPLETE".equals(status)) {
-						String reportVal = ((CharacterData) (root.getElementsByTagName("indice").item(0).getFirstChild()))
-								.getData().trim();
+						String reportVal = ((CharacterData) (root.getElementsByTagName("indice").item(0)
+								.getFirstChild())).getData().trim();
 						currentItem.setReviewScore((int) Math.round(Double.parseDouble(reportVal)));
 						currentItem.setStatus(ContentReviewItem.SUBMITTED_REPORT_AVAILABLE_CODE);
-					} else if ("ANALYSE_PROCESSING".equals(status)){
+					} else if ("ANALYSE_PROCESSING".equals(status)) {
 						if (root.getElementsByTagName("progression") != null) {
 							String progression = ((CharacterData) (root.getElementsByTagName("progression").item(0)
 									.getFirstChild())).getData().trim();
@@ -1498,7 +1498,7 @@ public class CompilatioReviewServiceImpl extends BaseReviewServiceImpl {
 					}
 					currentItem.setErrorCode(errorCodeInt);
 					dao.update(currentItem);
-
+					continue;
 				}
 			}
 			// release the lock so the reports job can handle it
